@@ -4,7 +4,7 @@
 import org.cyberneko.html.parsers.SAXParser
 import groovy.util.XmlSlurper
 import java.text.SimpleDateFormat
-
+import groovy.json.JsonSlurper
 
 class Main {
     static main(args) {
@@ -68,7 +68,15 @@ class Main {
             orderlist[i].storename = storename
             orderlist[i].currency = currency
             orderlist[i].orderamount = orderamount
+            orderlist[i].origcurrency = currency
+            orderlist[i].origorderamount = orderamount
             orderlist[i].ordertime = ordertime
+            if (currency != "EUR") {
+                SimpleDateFormat sdfex = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                def json = new JsonSlurper().parseText( new URL( "https://api.exchangeratesapi.io/" + sdfex.format(ordertime) + "?base=${currency}&symbols=EUR" ).text )
+                orderlist[i].currency = "EUR"
+                orderlist[i].orderamount = (new BigDecimal( orderamount)) * json.rates['EUR']
+            }
         }
 
 
@@ -89,6 +97,8 @@ class Main {
             print '"' + it.currency + '"'; print ";"
             print '"' + it.orderamount + '"'; print ";"
             print '"' + it.prodname + '"'; print ";"
+            print '"' + it.origcurrency + '"'; print ";"
+            print '"' + it.origorderamount + '"'; print ";"
             println ""
         }
 
