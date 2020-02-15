@@ -50,6 +50,8 @@ class Main {
             def currency = "NA"
             if (orderamount.contains('$'))
                 currency = '$'
+            if (orderamount.contains('eur')||orderamount.contains('€'))
+                currency = 'EUR'
             orderamount = orderamount.replaceAll("^. ", "")
 
 
