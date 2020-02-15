@@ -49,7 +49,7 @@ class Main {
             def orderamount = orders[i].TD[3].DIV.P[1].text().trim()
             def currency = "NA"
             if (orderamount.contains('$'))
-                currency = '$'
+                currency = 'USD'
             if (orderamount.contains('eur')||orderamount.contains('€'))
                 currency = 'EUR'
             orderamount = orderamount.replaceAll("^. ", "")
